@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art and Message</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+        body {
+            background-color: #000000;
+            color: #009900;
+            font-family: 'Source Code Pro', monospace;
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            width: calc(100% - 30px);
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .ascii-start-container {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .ascii-art {
+            padding: 20px;
+            white-space: pre;
+            margin-top: 0px;
+            margin-left: 30px;
+            font-size: 0.8em;
+            position: relative;
+        }
+
+        .new-ascii-art {
+            padding: 20px;
+            white-space: pre;
+            margin-top: 0px;
+            font-size: 0.8em;
+            opacity: 0;
+            transition: opacity 1s;
+            position: absolute;
+            top: 150px; /* 새 아스키 아트의 위치를 조정 */
+            left: 30px; /* 새 아스키 아트의 위치를 조정 */
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .start-button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px; /* Added margin-top to position below ASCII art */
+        }
+
+        .start-button {
+            font-size: 1.5em;
+            color: #009900;
+            background-color: transparent;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .start-button:hover {
+            background-color: #009900;
+            color: #000000;
+        }
+
+        .message-container {
+            flex: 1;
+            padding: 20px;
+            font-size: 28px;
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+            min-height: 500px;
+            margin-left: 30px; /* Adjusted margin-left */
+        }
+
+        .message {
+            animation: scrollText 5s linear infinite;
+            position: relative;
+            width: calc(100% - 50px);
+            line-height: 1.8;
+            height: 100%;
+        }
+
+        .message p {
+            margin: 0;
+            position: relative;
+            display: inline-block;
+            transition: opacity 1s, transform 1s;
+            transform: translateX(0px);
+        }
+
+        .message p span {
+            display: inline-block; /* 가로로 표시되도록 수정 */
+            margin-right: 10px; /* 단어 간격을 조정합니다. */
+            white-space: nowrap; /* 단어가 줄 바꿈되지 않도록 설정 */
+        }
+
+        .message .korean {
+            font-family: 'Nanum Gothic', sans-serif;
+        }
+
+        .message .english {
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateY(0%);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 3s forwards, moveLeft 3s forwards;
+        }
+
+        @keyframes moveLeft {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes moveRandom {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(var(--random-x), var(--random-y));
+            }
+        }
+
+        .move-random {
+            animation: moveRandom 3s forwards;
+            position: absolute;
+        }
+
+        .no-scroll {
+            animation: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="ascii-start-container">
+            <div class="ascii-art" id="ascii-art">
+  _______ _                  _        
+ |__   __(_)                | |       
+    | |   _ _ __ ___   ___  | |_ ___  
+    | |  | | '_ ` _ \ / _ \ | __/ _ \ 
+    | |  | | | | | | |  __/ | || (_) |
+   _|_|_ |_|_| |_| |_|\___|  \__\___/ 
+  / ____| |                           
+ | |    | | ___  __ _ _ __            
+ | |    | |/ _ \/ _` | '_ \           
+ | |____| |  __/ (_| | | | |          
+  \_____|_|\___|\__,_|_| |_|           
+            </div>
+            <div class="start-button-container">
+                <button class="start-button" id="start-button">START</button>
+            </div>
+        </div>
+        <div class="message-container">
+            <div class="message" id="message-container">
+                <p class="korean">트위터를 할 때 사람들의 여론이 얼마나 물타기가 심한지 특히 하나의 이슈에 대해 찬반견해가 자료의 타당성이 아닌 리트윗과 반응수로 결정되는 게 너무 싫었다</p>
+                <p class="english">I regularly see the same person getting hates all the time it makes me sad</p>
+                <p class="english">The comments towards idols were very offensive and unpleasant to see</p>
+                <p class="korean">욕 먹을 짓을 했겠지 그냥 싫어 왜 나대냐</p>
+                <p class="english">Once I posted my work video online when I was in high school there was a comment sayed it’s awful then I deleted the video</p>
+                <p class="korean">악플을 적어본 적이 없다 본 적은 있는데 익명으로 나는 욕하면 너무 끔찍할 것 같다</p>
+                <p class="english">When I accidently saw disgusting comment in youtube video</p>
+                <p class="english">It can be really hurtful reading hate comments because through the internet there are no emotions so you don't know the reason about the comment</p>
+                <p class="english">Some people are really harsh online They make up stories that are not true they also change the intentions and context of people who are good but the people online turn it negatively</p>
+                <p class="korean">성별 인종 나이 직업 부 등의 차이를 양극화시키는 말들</p>
+                <p class="korean">유독 인터넷에서 강한 남녀갈라치기</p>
+                <p class="korean">트위터를 할 때 사람들의 여론이 얼마나 물타기가 심한지 특히 하나의 이슈에 대해 찬반견해가 자료의 타당성이 아닌 리트윗과 반응수로 결정되는 게 너무 싫었다</p>
+                <p class="english">I regularly see the same person getting hates all the time it makes me sad</p>
+                <p class="english">The comments towards idols were very offensive and unpleasant to see</p>
+                <p class="korean">욕 먹을 짓을 했겠지 그냥 싫어 왜 나대냐</p>
+                <p class="english">Once I posted my work video online when I was in high school there was a comment sayed it’s awful then I deleted the video</p>
+                <p class="korean">악플을 적어본 적이 없다 본 적은 있는데 익명으로 나는 욕하면 너무 끔찍할 것 같다</p>
+                <p class="english">When I accidently saw disgusting comment in youtube video</p>
+                <p class="english">It can be really hurtful reading hate comments because through the internet there are no emotions so you don't know the reason about the comment</p>
+                <p class="english">Some people are really harsh online They make up stories that are not true they also change the intentions and context of people who are good but the people online turn it negatively</p>
+                <p class="korean">성별 인종 나이 직업 부 등의 차이를 양극화시키는 말들</p>
+                <p class="korean">유독 인터넷에서 강한 남녀갈라치기</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('start-button').addEventListener('click', function() {
+    var asciiStartContainer = document.getElementById('ascii-start-container');
+    asciiStartContainer.classList.add('fade-out');
+
+    setTimeout(function() {
+    var messages = document.querySelectorAll('.message p');
+    var messageContainer = document.querySelector('.message-container');
+    var containerWidth = messageContainer.offsetWidth;
+    var containerHeight = messageContainer.offsetHeight;
+
+    messages.forEach(function(message) {
+        var text = message.textContent;
+        var words = text.split(' ');
+        var selectedWords = [];
+
+        var numWordsToRemove = 1; // 한 번에 제거할 단어 수
+        var numNewWords = 4; // 생성할 새로운 단어 수
+
+        for (var i = 0; i < words.length; i++) {
+            var word = words[i];
+            if (selectedWords.length >= numWordsToRemove && selectedWords.length < numWordsToRemove + numNewWords) {
+                // 생성할 새로운 단어 수에 도달했을 때 추가 단어로 선택
+                selectedWords.push(word);
+            } else if (Math.random() < 0.5 && !selectedWords.includes(word)) {
+                selectedWords.push(word);
+            }
+        }
+
+        var newMessage = document.createElement('p');
+        words.forEach(function(word) {
+            var span = document.createElement('span');
+            span.textContent = word + ' ';
+            if (selectedWords.includes(word)) {
+                if (/^[a-zA-Z]+$/.test(word)) {
+                    span.style.fontFamily = 'Source Code Pro, monospace';
+                } else {
+                    span.style.fontFamily = 'Nanum Gothic, sans-serif';
+                }
+                span.draggable = true;
+                span.addEventListener('dragstart', dragStart);
+                span.addEventListener('dragend', dragEnd);
+            } else {
+                span.style.fontFamily = 'Nanum Gothic, sans-serif';
+                span.classList.add('fade-out');
+            }
+            newMessage.appendChild(span);
+        });
+
+        message.parentNode.replaceChild(newMessage, message);
+    });
+
+    setTimeout(function() {
+        var selectedSpans = document.querySelectorAll('.message p span:not(.fade-out)');
+        var prevX = 0;
+        var prevY = 0;
+        selectedSpans.forEach(function(span) {
+            var wordWidth = span.offsetWidth;
+            var wordHeight = span.offsetHeight;
+            var maxRandomX = containerWidth - wordWidth;
+            var maxRandomY = containerHeight - wordHeight;
+            var randomX = prevX + Math.floor(Math.random() * (30 + 1 + 30)) - 30 + 'px';
+            var randomY = prevY + Math.floor(Math.random() * (30 + 1 + 30)) - 30 + 'px';
+            prevX = parseInt(randomX, 10);
+            prevY = parseInt(randomY, 10);
+            span.style.setProperty('--random-x', randomX);
+            span.style.setProperty('--random-y', randomY);
+            span.classList.add('move-random');
+        });
+
+        document.querySelector('.message').classList.add('no-scroll');
+    }, 2000);
+
+}, 1000);
+
+
+    var newAsciiArt = document.createElement('pre');
+    newAsciiArt.classList.add('ascii-art', 'new-ascii-art');
+    newAsciiArt.innerHTML = `
+    ────────    
+  //········\\\\  
+ //··········\\\\ 
+//············\\\\
+│··············│
+│··············│
+│··············│
+│··············│
+│··············│
+\\\\············//
+ \\\\··········// 
+  \\\\········//  
+   ┴─ ──── ─┴   
+   ┬─ ──── ─┬   
+  //········\\\\  
+ //···────···\\\\ 
+//···/    \\···\\\\
+║···│      │···║
+║···│      │···║
+║···│      │···║
+║···│      │···║
+║···│      │···║
+║···│      │···║
+\\\\···\\    /···//
+ \\\\···────···// 
+  \\\\········//  
+   ══════════  
+`;
+
+    var container = document.querySelector('.container');
+    container.insertBefore(newAsciiArt, container.firstChild);
+
+    setTimeout(function() {
+        newAsciiArt.style.opacity = '1';
+    }, 6000);
+
+    // 아스키 아트 요소를 드롭 가능하게 설정
+    newAsciiArt.addEventListener('dragover', function(event) {
+        event.preventDefault();
+    });
+
+    newAsciiArt.addEventListener('drop', function(event) {
+        event.preventDefault();
+        var data = event.dataTransfer.getData('text');
+        var spans = document.querySelectorAll('.message p span');
+        spans.forEach(function(span) {
+            if (span.textContent.trim() === data.trim()) {
+                span.style.display = 'none'; // 단어를 사라지게 설정
+            }
+        });
+    });
+});
+
+function dragStart(event) {
+    event.dataTransfer.setData('text/plain', event.target.textContent);
+    event.target.classList.add('dragging');
+    event.target.parentNode.style.opacity = '0';
+}
+
+function dragEnd(event) {
+    event.target.classList.remove('dragging');
+    event.target.style.transition = 'transform 0.5s';
+    event.target.style.transform = 'translate(0, 0)';
+    setTimeout(function() {
+        event.target.style.transition = '';
+    }, 500);
+    event.target.parentNode.style.opacity = '';
+}
+    </script>
+</body>
+</html>
